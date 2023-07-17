@@ -1,7 +1,7 @@
 # spxmath
 
 Simple header only math library for graphics, physics and game development in C.
-This header is part of the [spxx](https://github.com:LogicEu/spxx.git) project and 
+This header is part of the [spxx](https://github.com/LogicEu/spxx.git) project and 
 it is compatible across platforms from C89 trough C++20. Perfectly suitable for
 doing CPU math for OpenGL applications, similar to libraries like 
 [glm](https://github.com/g-truc/glm.git).
