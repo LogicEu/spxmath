@@ -22,7 +22,7 @@ cmd() {
 }
 
 compile() {
-    cmd $cc $1 -o $2 $std $opt ${wflag[*]} $inc $lib ${os[*]}
+    cmd $cc $1 -o $2 $std $opt ${wflag[*]} $inc $lib
 }
 
 cleanf() {
