@@ -43,6 +43,10 @@ graphics, physics and game development.
 
 /* Useful Math Macros */
 
+#ifndef _DEFAULT_SOURCE
+#define _DEFAULT_SOURCE
+#endif /* DEFAULT_SOURCE */
+
 #define SPXM_ABS(n) (((n) >= 0) ? (n) : -(n))
 #define SPXM_SIGN(n) (((n) >= 0) ? 1 : -1)
 #define SPXM_MAX(n, m) (((n) > (m)) ? (n) : (m))
