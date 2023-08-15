@@ -57,33 +57,70 @@ graphics, physics and game development.
 
 /* Simple Pixel Math */
 
+
+
+#ifndef IVEC2_TYPE_DEFINED
+#define IVEC2_TYPE_DEFINED
+
 typedef struct ivec2 {
     int x, y;
 } ivec2;
+
+#endif /* IVEC2_TYPE_DEFINED */
+
+#ifndef IVEC3_TYPE_DEFINED
+#define IVEC3_TYPE_DEFINED
 
 typedef struct ivec3 {
     int x, y, z;
 } ivec3;
 
+#endif /* IVEC3_TYPE_DEFINED */
+
+#ifndef IVEC4_TYPE_DEFINED
+#define IVEC4_TYPE_DEFINED
+
 typedef struct ivec4 {
     int x, y, z, w;
 } ivec4;
+
+#endif /* IVEC4_TYPE_DEFINED */
+
+#ifndef VEC2_TYPE_DEFINED
+#define VEC2_TYPE_DEFINED
 
 typedef struct vec2 {
     float x, y;
 } vec2;
 
+#endif /* VEC2_TYPE_DEFINED */
+
+#ifndef VEC3_TYPE_DEFINED
+#define VEC3_TYPE_DEFINED
+
 typedef struct vec3 {
     float x, y, z;
 } vec3;
+
+#endif /* VEC3_TYPE_DEFINED */
+
+#ifndef VEC4_TYPE_DEFINED
+#define VEC4_TYPE_DEFINED
 
 typedef struct vec4 {
     float x, y, z, w;
 } vec4;
 
+#endif /* VEC4_TYPE_DEFINED */
+
+#ifndef MAT4_TYPE_DEFINED
+#define MAT4_TYPE_DEFINED
+
 typedef struct mat4 {
     float data[4][4];
 } mat4;
+
+#endif /* MAT4_TYPE_DEFINED */
 
 float randf(void);
 float absf(float n);
