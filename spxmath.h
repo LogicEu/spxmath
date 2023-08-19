@@ -47,6 +47,7 @@ graphics, physics and game development.
 #define _DEFAULT_SOURCE
 #endif /* DEFAULT_SOURCE */
 
+#define SPXM_DIV(n) ((n) == 0.0F ? 0.0F : 1.0F / (n))
 #define SPXM_ABS(n) (((n) >= 0) ? (n) : -(n))
 #define SPXM_SIGN(n) (((n) >= 0) ? 1 : -1)
 #define SPXM_MAX(n, m) (((n) > (m)) ? (n) : (m))
@@ -130,7 +131,7 @@ float minf(float n, float m);
 float clampf(float n, float min, float max);
 float lerpf(float a, float b, float t);
 float ilerpf(float min, float max, float n);
-float smootlerpf(float a, float b, float t);
+float smoothlerpf(float a, float b, float t);
 float remapf(float min, float max, float a, float b, float n);
 float rad2deg(float rad);
 float deg2rad(float deg);
@@ -153,6 +154,23 @@ float vec2_sqdist(vec2 p, vec2 q);
 float vec2_dist(vec2 p, vec2 q);
 float vec2_dot(vec2 p, vec2 q);
 float vec2_rads(vec2 p);
+
+#define vec2_rads_inline(p) atan2f(p.y, p.x)
+#define vec2_sqmag_inline(p) (p.x * p.x + p.y * p.y)
+#define vec2_mag_inline(p) sqrtf(p.x * p.x + p.y * p.y)
+#define vec2_dot_inline(p, q) (p.x * q.x + p.y * q.y)
+#define vec2_rads_inline(p) atan2f(p.y, p.x)
+#define vec2_add_inline(p, q) do { p.x += q.x; p.y += q.y; } while (0)
+#define vec2_sub_inline(p, q) do { p.x -= q.x; p.y -= q.y; } while (0)
+#define vec2_prod(p, q) do { p.x *= q.x; p.y *= q.y; } while (0)
+#define vec2_mult_inline(p, n) do { p.x *= n; p.y *= n; } while (0)
+#define vec2_div_inline(p, n) do { n = SPXM_DIV(n); p.x *= n; p.y *= n; } while (0)
+#define vec2_norm_inline(p) do \
+{ float n = vec2_mag_inline(p); vec2_mult_inline(p, n); } while (0)
+#define vec2_lerp_inline(p, q, t) do \
+{ p.x += t * (q.x - p.x); p.y += t * (q.y - p.y); } while (0)
+#define vec2_cross_inline(p, q) do \
+{ float n = p.x - q.x; p.x = -(p.y - q.y); p.y = n; } while (0)
 
 vec3 vec3_rand(void);
 vec3 vec3_uni(float n);
@@ -261,7 +279,7 @@ float lerpf(float a, float b, float t)
 	return a + t * (b - a);
 }
 
-float smootlerpf(float a, float b, float t)
+float smoothlerpf(float a, float b, float t)
 {
 	return a + (t * t * (3.0 - 2.0 * t)) * (b - a);
 }
