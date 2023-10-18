@@ -162,7 +162,7 @@ float vec2_rads(vec2 p);
 #define vec2_rads_inline(p) atan2f(p.y, p.x)
 #define vec2_add_inline(p, q) do { p.x += q.x; p.y += q.y; } while (0)
 #define vec2_sub_inline(p, q) do { p.x -= q.x; p.y -= q.y; } while (0)
-#define vec2_prod(p, q) do { p.x *= q.x; p.y *= q.y; } while (0)
+#define vec2_prod_inline(p, q) do { p.x *= q.x; p.y *= q.y; } while (0)
 #define vec2_mult_inline(p, n) do { p.x *= n; p.y *= n; } while (0)
 #define vec2_div_inline(p, n) do { n = SPXM_DIV(n); p.x *= n; p.y *= n; } while (0)
 #define vec2_norm_inline(p) do \
