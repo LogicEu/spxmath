@@ -56,8 +56,9 @@ graphics, physics and game development.
 #define SPXM_LERP(a, b, t) ((a) + (t) * ((b) - (a)))
 #define SPXM_ILERP(min, max, n) (((max) - (min)) ? ((n) - (min)) / ((max) - (min)) : 0)
 
-/* Simple Pixel Math */
+#define SPXM_RANDMAX 0x7fffffff
 
+/* Simple Pixel Math */
 
 
 #ifndef IVEC2_TYPE_DEFINED
@@ -123,7 +124,6 @@ typedef struct mat4 {
 
 #endif /* MAT4_TYPE_DEFINED */
 
-float randf(void);
 float absf(float n);
 float signf(float n);
 float maxf(float n, float m);
@@ -136,9 +136,15 @@ float remapf(float min, float max, float a, float b, float n);
 float rad2deg(float rad);
 float deg2rad(float deg);
 
-vec2 vec2_rand(void);
+float        spxrandf(void);
+unsigned int spxrand(void);
+unsigned int spxrand_hash(unsigned int n);
+void         spxrand_seed_set(unsigned int n);
+unsigned int spxrand_seed_get(void);
+
 vec2 vec2_uni(float n);
 vec2 vec2_new(float x, float y);
+vec2 vec2_rand(void);
 vec2 vec2_add(vec2 p, vec2 q);
 vec2 vec2_sub(vec2 p, vec2 q);
 vec2 vec2_mult(vec2 p, float n);
@@ -172,9 +178,9 @@ float vec2_rads(vec2 p);
 #define vec2_cross_inline(p, q) do \
 { float n = p.x - q.x; p.x = -(p.y - q.y); p.y = n; } while (0)
 
-vec3 vec3_rand(void);
 vec3 vec3_uni(float n);
 vec3 vec3_new(float x, float y, float z);
+vec3 vec3_rand(void);
 vec3 vec3_add(vec3 p, vec3 q);
 vec3 vec3_sub(vec3 p, vec3 q);
 vec3 vec3_mult(vec3 p, float f);
@@ -189,9 +195,9 @@ float vec3_sqdist(vec3 p, vec3 q);
 float vec3_dist(vec3 p, vec3 q);
 float vec3_dot(vec3 p, vec3 q);
 
-vec4 vec4_rand(void);
 vec4 vec4_uni(float n);
 vec4 vec4_new(float x, float y, float z, float w);
+vec4 vec4_rand(void);
 vec4 vec4_add(vec4 p, vec4 q);
 vec4 vec4_sub(vec4 p, vec4 q);
 vec4 vec4_mult(vec4 p, float n);
@@ -239,15 +245,9 @@ ivec4 ivec4_from_vec4(vec4 p);
 * IMPLEMENTATION  *
 *******************/
 
-#include <stdlib.h>
 #include <math.h>
 
 /* useful utilities and functions */
-
-float randf(void)
-{
-	return (float)rand() / (float)RAND_MAX;
-}
 
 float absf(float n)
 {
@@ -304,15 +304,37 @@ float deg2rad(float deg)
 	return deg / (180.0F / M_PI);
 }
 
-/* vec2 implementation */
+/* platform independent pseudo random number generator functions */
 
-vec2 vec2_rand(void)
+static unsigned int spxseed = 0;
+
+void spxrand_seed_set(unsigned int n) 
 {
-    vec2 p;
-    p.x = randf();
-    p.y = randf();
-    return p;
+    spxseed = n;
 }
+
+unsigned int spxrand_seed_get(void)
+{
+    return spxseed;
+}
+
+unsigned int spxrand_hash(unsigned int n)
+{
+    n = (n << 13) ^ n;
+    return ((n * (n * n * 15731 + 789221) + 1376312589) & SPXM_RANDMAX);
+}
+
+unsigned int spxrand(void)
+{
+    return spxrand_hash(spxseed++);
+}
+
+float spxrandf(void)
+{
+    return (float)spxrand_hash(spxseed++) / (float)SPXM_RANDMAX;
+}
+
+/* vec2 implementation */
 
 vec2 vec2_uni(float n)
 {
@@ -327,6 +349,14 @@ vec2 vec2_new(float x, float y)
     vec2 p;
     p.x = x;
     p.y = y; 
+    return p;
+}
+
+vec2 vec2_rand(void)
+{
+    vec2 p;
+    p.x = spxrandf();
+    p.y = spxrandf();
     return p;
 }
 
@@ -437,9 +467,9 @@ float vec2_rads(vec2 p)
 vec3 vec3_rand(void)
 {
     vec3 p;
-    p.x = randf();
-    p.y = randf();
-    p.z = randf();
+    p.x = spxrandf();
+    p.y = spxrandf();
+    p.z = spxrandf();
     return p;
 }
 
@@ -562,16 +592,6 @@ float vec3_dot(vec3 p, vec3 q)
 
 /* vec4 implementation */
 
-vec4 vec4_rand(void)
-{
-    vec4 p;
-    p.x = randf();
-    p.y = randf();
-    p.z = randf();
-    p.w = randf();
-    return p;
-}
-
 vec4 vec4_uni(float n)
 {
     vec4 p;
@@ -589,6 +609,16 @@ vec4 vec4_new(float x, float y, float z, float w)
     p.y = y;
     p.z = z;
     p.w = w;
+    return p;
+}
+
+vec4 vec4_rand(void)
+{
+    vec4 p;
+    p.x = spxrandf();
+    p.y = spxrandf();
+    p.z = spxrandf();
+    p.w = spxrandf();
     return p;
 }
 

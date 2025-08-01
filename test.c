@@ -1,17 +1,30 @@
 #define SPXM_APPLICATION
 #include <spxmath.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <float.h>
 
-int main(void)
+int main(int argc, char** argv)
 {
-    float n;
-    vec2 a, b, c;
-    mat4 m;
+    int i, count = 100;
+    float min = FLT_MAX, max = FLT_MIN, sum = 0.0F;
 
-    a = vec2_rand();
-    b = vec2_uni(1.0F);
-    c = vec2_new(0.0F, 1.0F);
-    c = vec2_add(vec2_sub(a, b), vec2_prod(a, c));
-    n = vec2_mag(c);    
-    m = mat4_id();
-    return (int)(n * m.data[0][0]);
+    if (argc > 1) {
+        count = atoi(argv[1]);
+        spxrand_seed_set(argc > 2 ? atoi(argv[2]) : 0);
+    }
+
+    for (i = 0; i < count; ++i) {
+        float m = spxrandf();
+        printf("%f\n", m);
+        min = m < min ? m : min;
+        max = m > max ? m : max;
+        sum += m;
+    }
+
+    printf("min: %f\n", min);
+    printf("max: %f\n", max);
+    printf("average: %f\n", sum / (float)count);
+    return 0;
 }
+
