@@ -136,9 +136,12 @@ float remapf(float min, float max, float a, float b, float n);
 float rad2deg(float rad);
 float deg2rad(float deg);
 
-float        spxrandf(void);
 unsigned int spxrand(void);
 unsigned int spxrand_hash(unsigned int n);
+unsigned int spxrand_between(unsigned int min, unsigned int max);
+float        spxrandf(void);
+float        spxrandf_hash(unsigned int n);
+float        spxrandf_between(float min, float max);
 void         spxrand_seed_set(unsigned int n);
 unsigned int spxrand_seed_get(void);
 
@@ -318,20 +321,35 @@ unsigned int spxrand_seed_get(void)
     return spxseed;
 }
 
+unsigned int spxrand(void)
+{
+    return spxrand_hash(spxseed++);
+}
+
 unsigned int spxrand_hash(unsigned int n)
 {
     n = (n << 13) ^ n;
     return ((n * (n * n * 15731 + 789221) + 1376312589) & SPXM_RANDMAX);
 }
 
-unsigned int spxrand(void)
+unsigned int spxrand_between(unsigned int min, unsigned int max)
 {
-    return spxrand_hash(spxseed++);
+    return min + (spxrand() % (max - min));
 }
 
 float spxrandf(void)
 {
     return (float)spxrand_hash(spxseed++) / (float)SPXM_RANDMAX;
+}
+
+float spxrandf_hash(unsigned int hash)
+{
+    return (float)spxrand_hash(hash) / (float)SPXM_RANDMAX;
+}
+
+float spxrandf_between(float min, float max)
+{
+    return min + spxrandf() * (max - min);
 }
 
 /* vec2 implementation */
